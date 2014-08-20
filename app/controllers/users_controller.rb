@@ -14,6 +14,7 @@ class UsersController < ApplicationController
   	
   def show
     @user = User.find(params[:id])
+    @orders = @user.orders.paginate(page: params[:page])
   end
   	
   def create
@@ -47,17 +48,26 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
 
+  def addcredit
+  	@user = User.find(params[:id])
+  	credit = @user.credit + params[:user][:credit].to_i
+  	if (Integer(params[:user][:credit]) rescue false) && @user.update_attribute(:credit, credit)
+  		flash[:success] = "Added Credit amount of #{params[:user][:credit].to_i} to User: #{@user.name}. Total credit is #{@user.credit}"
+  		redirect_to users_url
+  	else
+  		flash[:error] = "Please enter a valid amount."
+  		render 'editcredit'
+  	end
+  end
+
+  def editcredit
+  	@user = User.find(params[:id])
+  end
+
   private
 
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
-    end
-
-    def signed_in_user
-      unless signed_in?
-        store_location
-        redirect_to signin_url, notice: "Please sign in."
-      end
     end
 
     def correct_user
@@ -67,4 +77,5 @@ class UsersController < ApplicationController
 
     def admin_user
       redirect_to(root_url) unless current_user.admin?
+    end
 end

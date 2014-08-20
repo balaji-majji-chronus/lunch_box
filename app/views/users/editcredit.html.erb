@@ -1,0 +1,15 @@
+<% provide(:title, 'Edit credit') %>
+<h1>Edit Credit</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for @user, url: addcredit_path(:id => @user.id ) do |f| %>
+      <%= render 'shared/error_messages' %>
+      
+      <%= f.label :credit_amount %>
+      <%= f.text_field :credit %>
+
+      <%= f.submit "Update Credit", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>

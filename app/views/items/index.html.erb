@@ -1,0 +1,23 @@
+<% provide(:title, 'Menu') %>
+<h1>Menu</h1>
+
+<%= form_tag(checkout_path) do -%>
+  <ul>
+  <table>
+    <tr>
+    	<th> Select </th>
+    	<th> Item Name</th>
+    	<th> Price (INR) </th>
+    	<% if current_user.admin? %>
+    		<th></th>
+  		<% end %>
+    </tr>
+    <%= render @items %>
+  </table>
+</ul>
+  <% if current_user.admin? %>
+  	<div><%= link_to 'New Item', additem_path %></div>
+  <% else %>
+    <div><%= submit_tag 'Check Out', data: { confirm: "Confirm order?" }, class: "btn btn-large btn-primary" %></div>
+  <% end -%>  
+<% end -%>

@@ -9,4 +9,12 @@
     </section>
   </aside>
   Available credit amount: <%= @user.credit %>
+  <div class="span8">
+    <% if @user.orders.any? %>
+      <ol class="orders">
+        <%= render @orders %>
+      </ol>
+      <%= will_paginate @orders %>
+    <% end %>
+  </div>
 </div>

@@ -1,0 +1,20 @@
+<li>
+  <span class="content">Order ID: <%= order.id %> 
+  	<% if !order.status %>
+  		<%= link_to "cancel", order, method: :delete, data: { confirm: "Do you want to cancel the order?" } %>
+  	<% else %>
+  		<%= Delivered %>
+  	<% end %>
+  <ol>
+  	<% order.orderedItems.each do |oitem| %>
+  		<% item = Item.find(oitem.item_id) %>
+  		<li> <%= item.name %>   <%= item.price  %> </li> 
+  	<% end %>
+  	Total: <%= OrderedItem.order_amount(order.orderedItems) %>
+  </ol>
+  </span>
+  <span class="timestamp">
+    Ordered on <%= order.created_at.ctime %>.
+  </span>
+  
+</li>

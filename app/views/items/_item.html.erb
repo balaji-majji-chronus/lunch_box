@@ -1,0 +1,9 @@
+<tr>
+  <td><%= check_box_tag "items[]", item.id, false, :class=>'batches_box'%></td>
+  <td><%= item.name %></td>
+  <td><%= item.price %></td>
+  <% if current_user.admin? %>
+    <td> <%= link_to "change", item, method: :edit%>
+    | <%= link_to "delete", item, method: :delete, data: { confirm: "You sure?" } %></td>
+  <% end %>
+</tr>

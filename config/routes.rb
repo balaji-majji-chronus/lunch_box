@@ -1,6 +1,11 @@
 LunchBox::Application.routes.draw do
+  get "order/create"
+  
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
+  resources :items
+  resources :orders
+
   root  'static_pages#home'
   match '/help',    to: 'static_pages#help',    via: 'get'
   match '/about',   to: 'static_pages#about',   via: 'get'
@@ -8,7 +13,13 @@ LunchBox::Application.routes.draw do
   match '/signup',  to: 'users#new',            via: 'get'
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
-  
+  match '/checkout',  to: 'items#checkout',         via: 'post'
+  match '/editcredit', to: 'users#editcredit',  via: 'get'
+  match '/addcredit', to: 'users#addcredit',  via: 'patch'
+  match '/additem',  to: 'items#new',            via: 'get'
+  match '/buy',      to: 'orders#create',     via: 'post'
+  match '/print',   to: 'orders#generatePdf',   via: 'get'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
