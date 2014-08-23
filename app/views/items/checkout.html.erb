@@ -1,12 +1,30 @@
-<h1> check out </h1>
+<h1> Check out </h1>
 
 <ul class="checkout">
-  <% for b in @items %>
-    <li> <%= b.name %>
-       <%= b.price %>
-    </li>
+<table style="width:50%" class="order_table" align="center">
+    <tr>
+    	<th width="40%"> Item Name</th>
+    	<th width="20%"> Price (INR) </th>
+    	<% if current_user.admin? %>
+    		<th></th>
+    	<% else %>
+    		<th> Quantity </th>
+  		<% end %>
+    </tr>
+  <% @items.each do |item| %>
+  	<tr>
+    <td> <%= item.name %> <%= item.id %> </td>
+    <td> <%= item.price %> </td>
+    <td> <%= @quantities["#{item.id}"][:quantity] %> </td>
+    </tr>
   <% end %>
-  <li> <%= Item.total_price(@items) %> </li>
-  <%= button_to "Buy Order", { action: "create", :controller=>"orders", :items => @items }, 
-  							   data: { confirm: "Proceed to pay?" }, class: "btn btn-large btn-primary"  %>
+  <tr> <th> Total amount: </th> <th colspan="2"><%= Item.total_order_cost(@items, @quantities) %> </th></tr>
+
+  
+  <tr><td colspan="3" align="center">
+  		<%= button_to "Buy Order", { action: "create", :controller=>"orders", 
+  									:items => @items, :quantities => @quantities }, 
+  							   		data: { confirm: "Proceed to pay?" }, class: "btn btn-primary"  %>
+  </td></tr>
+</table>  		
 </ul>

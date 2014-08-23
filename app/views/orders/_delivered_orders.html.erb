@@ -1,0 +1,38 @@
+<ol class="orders">
+<% @delivered_orders.each  do  |order|%>
+
+<div class="row">
+  <aside class="span2">	
+  <% user = User.find(order.user_id)%>
+  <%= gravatar_for user, size: 52 %>
+  <%= link_to user.name, user %>
+  </aside>
+  <div class="span4">
+  <li>
+  Order ID: <%= order.id %> </br>
+  <span class="timestamp">
+    Ordered at:  <%= order.created_at.ctime %>.
+    Delivered at: <%= order.updated_at.ctime %>.
+  </span>	
+  <table style="width:80%" class="order_table"> 
+  <tr> <th width="70%" align="left"> Item Name</th> <th width="20%"> Price </th> <th> Quantity </th></tr>
+  <% order.orderedItems.each do |oitem| %>
+  		<% item = Item.find(oitem.item_id) %>
+  		<tr> 
+  			<td> <%= item.name %> </td>  
+  			<td> <%= oitem.price  %> </td> 
+  			<td> <%= oitem.quantity %>
+  		</tr>
+  <% end %>
+  <tr>
+    <th> Total: </th> 
+    <th> <%= OrderedItem.order_amount(order.orderedItems) %> </th>
+  </tr>
+  </table>
+  <% store_location %>
+  
+  </div>
+  </li>
+ </div>
+<% end %>
+</ol>

@@ -1,17 +1,29 @@
 <li>
   <span class="content">Order ID: <%= order.id %> 
-  	<% if !order.status %>
-  		<%= link_to "cancel", order, method: :delete, data: { confirm: "Do you want to cancel the order?" } %>
+  	<% store_location %>
+  	<% if order.status == 0 %>
+  		Status: Ordered <%= link_to "cancel", cancel_path(:order => order), data: { confirm: "Do you want to cancel the order?" } %>
+  	<% elsif order.status == 1 %>
+  		Status: In Progress.. <%= link_to "cancel", cancel_path(:order => order), data: { confirm: "Order is in progress, still want to cancel the order?" } %>
+  	<% elsif order.status == 3 %>
+  		<span class="timestamp">
+    		Status: Cancelled on <%= order.updated_at.ctime %>.
+  		</span> 	
   	<% else %>
-  		<%= Delivered %>
+  		Status: Delivered 
   	<% end %>
-  <ol>
-  	<% order.orderedItems.each do |oitem| %>
+  <table style="width:45%" class="order_table"> 
+  <tr> <th width="70%" align="left"> Item Name</th> <th width="20%"> Price </th> <th> Quantity </th></tr>
+  <% order.orderedItems.each do |oitem| %>
   		<% item = Item.find(oitem.item_id) %>
-  		<li> <%= item.name %>   <%= item.price  %> </li> 
-  	<% end %>
-  	Total: <%= OrderedItem.order_amount(order.orderedItems) %>
-  </ol>
+  		<tr> 
+  			<td> <%= item.name %> </td>  
+  			<td> <%= oitem.price  %> </td> 
+  			<td> <%= oitem.quantity %>
+  		</tr>
+  <% end %>
+  	<tr><th> Total: </th> <th> <%= OrderedItem.order_amount(order.orderedItems) %> </th></tr>
+  </table>
   </span>
   <span class="timestamp">
     Ordered on <%= order.created_at.ctime %>.

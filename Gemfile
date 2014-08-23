@@ -9,6 +9,7 @@ gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'
 gem 'pdfcrowd', '2.6.0'
 
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record	
   gem 'sqlite3'  # , '1.3.8'

@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
 
-  before_action :signed_in_user, only: [:index, :edit, :update]
-  before_action :correct_user,   only: [:edit, :update]
-  before_action :admin_user,     only: :destroy
+  before_action :signed_in_user, only: [:show, :index, :edit, :update]
+  before_action :correct_user,   only: [:edit, :update, :show]
+  before_action :admin_user,     only: [:destroy, :addcredit, :editcredit]
 
   def new
   	@user = User.new
@@ -15,6 +15,12 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @orders = @user.orders.paginate(page: params[:page])
+    if :admin_user
+    	@inprogress_orders = Order.inprogress_orders
+  		@open_orders = Order.fresh_orders
+  		@delivered_orders = Order.delivered_orders
+  		@cancelled_orders = Order.cancelled_orders
+  	end
   end
   	
   def create
@@ -36,7 +42,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       flash[:success] = "Profile updated"
-      redirect_back_or user
+      redirect_to @user
     else
       render 'edit'
     end
@@ -71,8 +77,8 @@ class UsersController < ApplicationController
     end
 
     def correct_user
-      @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
+      @user = User.find(params[:id]) || not_found
+      redirect_to User.find(current_user.id) if !current_user.admin? and !current_user?(@user)      	 
     end
 
     def admin_user

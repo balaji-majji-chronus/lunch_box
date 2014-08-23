@@ -18,7 +18,11 @@ LunchBox::Application.routes.draw do
   match '/addcredit', to: 'users#addcredit',  via: 'patch'
   match '/additem',  to: 'items#new',            via: 'get'
   match '/buy',      to: 'orders#create',     via: 'post'
-  match '/print',   to: 'orders#generatePdf',   via: 'get'
+  match '/take',    to: 'orders#take',      via: 'get'
+  match '/inprogress', to: 'orders#inprogress',  via: 'get'
+  match '/deliver',   to: 'orders#deliver',   via:  'get'
+  match '/cancel',  to: 'orders#cancel',    via:  'get'
+  match 'readd',    to: 'items#readd',      via: 'get'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

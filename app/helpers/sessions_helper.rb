@@ -27,6 +27,7 @@ module SessionsHelper
     current_user.update_attribute(:remember_token, User.digest(User.new_remember_token))
     cookies.delete(:remember_token)
     self.current_user = nil
+    session.delete(:return_to)
   end
 
   def redirect_back_or(default)

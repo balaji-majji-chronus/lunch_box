@@ -8,7 +8,7 @@ class OrderedItem < ActiveRecord::Base
   def OrderedItem.order_amount(oitems)
   	total = 0
   	oitems.each do |oitem|
-  		total += Item.find(oitem.item_id).price
+  		total += oitem.price * oitem.quantity
   	end
   	return total
   end

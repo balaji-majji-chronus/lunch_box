@@ -6,6 +6,32 @@
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
   <%= render 'layouts/shim' %>
+  <script type="text/javascript">
+	
+	function enable_quantity_field(status, id) {
+		document.getElementById(id).disabled = !status;
+	}
+
+	function validate_order(id) {
+		var checked = document.getElementsByName(id);
+		var count = 0;
+		for (i = 0; i < checked.length; i++) {
+ 		   if(checked[i].checked){
+ 		   		count += 1;
+ 		   		if(document.getElementById(checked[i].value).value < 1){
+ 		   			alert("Please select valid quantity");
+ 		   			return false;
+ 		   		}
+
+ 		    }
+		}
+		if(count == 0){
+			alert("Please select one item to order.");
+			return false;
+		}		
+	}
+
+  </script>
 </head>
 <body>
   <%= render 'layouts/header' %>
@@ -15,7 +41,7 @@
     <% end %>
 
     <%= yield %>
-    <%= render 'layouts/footer' %>
+    
   </div>
 </body>
 </html>

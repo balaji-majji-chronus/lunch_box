@@ -1,23 +1,42 @@
 <% provide(:title, 'Menu') %>
-<h1>Menu</h1>
 
-<%= form_tag(checkout_path) do -%>
+<h1>Menu</h1>
+<%= form_tag(checkout_path, onsubmit: 'return validate_order("cb")') do -%>
   <ul>
-  <table>
+  <table style="width:50%" class="order_table" align="center">
     <tr>
-    	<th> Select </th>
-    	<th> Item Name</th>
-    	<th> Price (INR) </th>
+    	<% if !current_user.admin? %>
+    		<th width="10%"> Select </th>
+    	<% end %>
+    	<th width="40%"> Item Name</th>
+    	<th width="20%"> Price (INR) </th>
     	<% if current_user.admin? %>
-    		<th></th>
+    		<th> </th>
+    	<% else %>
+    		<th> Quantity </th>
   		<% end %>
     </tr>
+    <% @category = "" %>
     <%= render @items %>
+    <tr></tr>
+    <tr>
+  <% if current_user.admin? %>
+  	<td colspan="2" align="right"> <%= button_to 'New Item', additem_path, class: "btn btn-primary" %> </td>
+  <% else %>
+    <td colspan="3" align="right"> <%= submit_tag 'Check Out', data: { confirm: "Confirm order?" }, class: "btn btn-primary", width:20 %></td>
+  <% end -%>
+  </tr>
   </table>
 </ul>
-  <% if current_user.admin? %>
-  	<div><%= link_to 'New Item', additem_path %></div>
-  <% else %>
-    <div><%= submit_tag 'Check Out', data: { confirm: "Confirm order?" }, class: "btn btn-large btn-primary" %></div>
-  <% end -%>  
+<% end -%>
+
+<% if current_user.admin? && @unavailable_items.length > 0 %>
+  <h3 align="center"> Deleted Items %> 	
+  <table style="width:30%" class="order_table" align="center">
+  	<tr>
+    	<th width="60%"> Item Name</th>
+    	<th>Select</th>
+    </tr>	
+    <%= render 'unavailable_items' %>
+    </table>
 <% end -%>

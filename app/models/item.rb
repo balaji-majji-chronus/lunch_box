@@ -5,9 +5,11 @@ class Item < ActiveRecord::Base
   validates :price, presence: true, :numericality => true
   validates :category, presence: true
 
-  def Item.total_price(items)
+
+  # given items and quantity returns the total price, here price is current item price
+  def Item.total_order_cost(items, quantities)
   	total = 0
-  	items.each { |item| total += item.price } 
+  	items.each { |item| total += (quantities["#{item.id}"][:quantity].to_i) * item.price } 
   	return total
   end
 

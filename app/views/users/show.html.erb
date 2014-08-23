@@ -6,11 +6,30 @@
         <%= gravatar_for @user %>
         <%= @user.name %>
       </h1>
+      	<% if !@user.admin %>
+      		<ol>Credit Amount: <%= @user.credit %></ol>
+      	<% end %>
     </section>
   </aside>
-  Available credit amount: <%= @user.credit %>
+  
   <div class="span8">
-    <% if @user.orders.any? %>
+    <% if @user.admin %>
+      <% @orders = Order.fresh_orders %>
+      <% status = params[:status] %>
+      <% if status == '1' %>
+      	<h3> In Progress Orders </h3>
+      	<%= render 'orders/inprogress_orders' %>
+      <% elsif status == '2' %>
+      	<h3> Delivered Orders </h3>
+      	<%= render 'orders/delivered_orders'%>
+      <% elsif status == '3' %>
+      	<h3> Cancelled Orders </h3>
+      	<%= render 'orders/cancelled_orders'%>	
+      <% else %>
+      	<h3> Today's Orders </h3>	
+      	<%= render 'orders/user_orders'%>
+      <% end %>
+    <% elsif @user.orders.any? %>
       <ol class="orders">
         <%= render @orders %>
       </ol>

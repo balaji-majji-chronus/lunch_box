@@ -1,0 +1,7 @@
+<% @unavailable_items.each do |item| %>
+<tr>
+  <td><%= item.name.capitalize %></td>
+  <td> <%= link_to "add to menu", readd_path(:id => item.id) %></td>
+</tr>
+
+<% end %>

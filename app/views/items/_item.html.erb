@@ -1,9 +1,22 @@
+<% if item.available %>
+<% if @category != item.category %>
+	<tr>
+		<td colspan="4" align="center"> <h4> <%= item.category %> </h4></td>
+	</tr>	
+	<% @category = item.category %>
+<% end %>
 <tr>
-  <td><%= check_box_tag "items[]", item.id, false, :class=>'batches_box'%></td>
-  <td><%= item.name %></td>
+  <% if !current_user.admin? %>	
+  	<td><%= check_box_tag "cb", item.id, false, :class=>'batches_box',
+  			 onclick: "enable_quantity_field(this.checked, #{item.id})"%></td>
+  <% end %>
+  <td><%= item.name.capitalize %></td>
   <td><%= item.price %></td>
   <% if current_user.admin? %>
-    <td> <%= link_to "change", item, method: :edit%>
+    <td> <%= link_to "change", edit_item_path(item.id) %>
     | <%= link_to "delete", item, method: :delete, data: { confirm: "You sure?" } %></td>
+  <% else %>
+  	<td> <%= number_field_tag "items[#{item.id}][quantity]", 0, id:item.id, :disabled => "disabled" %> </td>  
   <% end %>
 </tr>
+<% end %>
