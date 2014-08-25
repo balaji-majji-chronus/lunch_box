@@ -21,7 +21,7 @@
     <tr></tr>
     <tr>
   <% if current_user.admin? %>
-  	<td colspan="2" align="right"> <%= button_to 'New Item', additem_path, class: "btn btn-primary" %> </td>
+  	<td colspan="2" align="right"> <%= link_to 'New Item', additem_path, class: "btn btn-primary" %> </td>
   <% else %>
     <td colspan="3" align="right"> <%= submit_tag 'Check Out', data: { confirm: "Confirm order?" }, class: "btn btn-primary", width:20 %></td>
   <% end -%>
@@ -31,7 +31,7 @@
 <% end -%>
 
 <% if current_user.admin? && @unavailable_items.length > 0 %>
-  <h3 align="center"> Deleted Items %> 	
+  <h3 align="center"> Deleted Items </h3>
   <table style="width:30%" class="order_table" align="center">
   	<tr>
     	<th width="60%"> Item Name</th>

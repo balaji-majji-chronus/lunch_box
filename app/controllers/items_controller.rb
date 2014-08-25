@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
 
-  before_action :admin_user, only: [:new, :create, :destroy]
+  before_action :admin_user, only: [:new, :create, :destroy, :readd]
   before_action :signed_in_user, only: [:index, :checkout]
 
   def new
@@ -11,7 +11,7 @@ class ItemsController < ApplicationController
   	@item = Item.new(item_params)
     if @item.save
       flash[:success] = "Item added successfully."
-      redirect_to items_path
+      redirect_to items_url
     else
       render 'new'
     end
@@ -45,13 +45,16 @@ class ItemsController < ApplicationController
   end
 
   def checkout
-  	if params[:items].nil?
-  		flash[:error] = "Select atleast one item to order."
+  	begin  		
+  		if params[:items].nil?
+  			flash[:error] = "Select atleast one item to order."
+  			redirect_to items_url
+  		else
+			@items = Item.find(params[:items].keys)
+			@quantities = params[:items]
+  		end
+  	rescue Exception => e
   		redirect_to items_url
-  	else
-		@items = Item.find(params[:items].keys)
-		@quantities = params[:items]
-
   	end
   end
 
@@ -65,10 +68,6 @@ class ItemsController < ApplicationController
 
   	def item_params
       params.require(:item).permit(:name, :price, :category)
-    end
-
-  	def admin_user
-      redirect_to(root_url) unless current_user.admin?
     end
 
 end

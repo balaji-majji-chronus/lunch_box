@@ -16,7 +16,7 @@
     <td> <%= link_to "change", edit_item_path(item.id) %>
     | <%= link_to "delete", item, method: :delete, data: { confirm: "You sure?" } %></td>
   <% else %>
-  	<td> <%= number_field_tag "items[#{item.id}][quantity]", 0, id:item.id, :disabled => "disabled" %> </td>  
+  	<td> <%= number_field_tag "items[#{item.id}][quantity]", 0, id:item.id, :disabled => "disabled", :min => 0%> </td>  
   <% end %>
 </tr>
 <% end %>

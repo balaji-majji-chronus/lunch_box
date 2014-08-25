@@ -77,8 +77,12 @@ class UsersController < ApplicationController
     end
 
     def correct_user
-      @user = User.find(params[:id]) || not_found
-      redirect_to User.find(current_user.id) if !current_user.admin? and !current_user?(@user)      	 
+      begin
+      		@user = User.find(params[:id])
+      		redirect_to User.find(current_user.id) if !current_user.admin? and !current_user?(@user)      	 
+      	rescue Exception => e
+      		redirect_to current_user
+      	end	
     end
 
     def admin_user

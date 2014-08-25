@@ -23,7 +23,8 @@ LunchBox::Application.routes.draw do
   match '/deliver',   to: 'orders#deliver',   via:  'get'
   match '/cancel',  to: 'orders#cancel',    via:  'get'
   match 'readd',    to: 'items#readd',      via: 'get'
-
+  get '/:anything', to: 'errors#routing', constraints: {:anything => /.*/}
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

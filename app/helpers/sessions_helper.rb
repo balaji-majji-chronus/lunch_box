@@ -15,8 +15,12 @@ module SessionsHelper
   end
 
   def current_user
-    remember_token = User.digest(cookies[:remember_token])
-    @current_user ||= User.find_by(remember_token: remember_token)
+  	begin
+    	remember_token = User.digest(cookies[:remember_token])
+    	@current_user ||= User.find_by(remember_token: remember_token)
+    rescue Exception => e
+  		redirect_to root_url
+  	end
   end
 
   def current_user?(user)

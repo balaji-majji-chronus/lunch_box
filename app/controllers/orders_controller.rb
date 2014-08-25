@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
 
-  before_action :signed_in_user, only: [:create, :destroy]
+  before_action :signed_in_user
+  before_action :admin_user, only: [:take, :inprogress, :deliver]
 
   def create
   	@items = Item.find(params[:items])
@@ -56,19 +57,23 @@ class OrdersController < ApplicationController
   end
 
   def cancel
-  	@order = Order.find(params[:order])
-  	@user = User.find(@order.user_id)
-  	total = OrderedItem.order_amount(@order.ordered_items)
-	credit = @user.credit
-  	credit += total
-  	@user.update_attribute(:credit, credit)
-  	@order.update_attribute(:status, 3)
-  	if current_user.admin
-  		flash[:success] = "Order cancelled successfully. Amount credited to #{@user.name} account."
-  	else
-  		flash[:success] = "Order cancelled successfully. Amount credited to your account."
+  	begin
+  		@order = Order.find(params[:order])
+  		@user = User.find(@order.user_id)
+  		total = OrderedItem.order_amount(@order.ordered_items)
+		credit = @user.credit
+  		credit += total
+  		@user.update_attribute(:credit, credit)
+  		@order.update_attribute(:status, 3)
+  		if current_user.admin
+  			flash[:success] = "Order cancelled successfully. Amount credited to #{@user.name} account."
+  		else
+  			flash[:success] = "Order cancelled successfully. Amount credited to your account."
+  		end
+  		redirect_back_or current_user
+  	rescue Exception => e  		  	
+  		redirect_to current_user
   	end
-  	redirect_back_or current_user
   end
 
 end

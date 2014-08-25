@@ -21,10 +21,16 @@
   <tr> <th> Total amount: </th> <th colspan="2"><%= Item.total_order_cost(@items, @quantities) %> </th></tr>
 
   
-  <tr><td colspan="3" align="center">
+  <tr><td align="center">
+  		<div><input type="button" value="Back" onClick="history.go(-1);return true;" class="btn btn-primary"></div>
+  		</td>
+		<td align="left">  		
+		</br>							
   		<%= button_to "Buy Order", { action: "create", :controller=>"orders", 
   									:items => @items, :quantities => @quantities }, 
   							   		data: { confirm: "Proceed to pay?" }, class: "btn btn-primary"  %>
-  </td></tr>
+  		</td>
+  		
+  </tr>
 </table>  		
 </ul>
